@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: BOS Integration API
+  version: 1.0.0
+  description: API for syncing contacts, reservations, and document triggers from HubSpot to BOS.
+servers:
+  - url: https://buggy.voyagergm.io
+    description: Production server
+
+paths:
+  /hubspot/event:
+    post:
+      summary: Sync contact based on HubSpot deal or ticket event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - eventType
+                - eventBody
+              properties:
+                eventType:
+                  type: string
+                  enum: [deal, ticket]
+                  description: Type of HubSpot event (deal or ticket)
+
+                eventBody:
+                  type: object
+                  properties:
+                    contactId:
+                      type: string
+                      description: Unique contact ID in HubSpot
+                    branchId:
+                      type: string
+                      description: Unique branch ID where the event happened
+
+                  required:
+                    - contactId
+                    - branchId
+      responses:
+        '200':
+          description: Sync successful
+        '400':
+          description: Validation error
+        '409':
+          description: Conflict (e.g., duplicate email across tenants)
