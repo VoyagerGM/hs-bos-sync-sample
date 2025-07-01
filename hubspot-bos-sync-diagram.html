@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HubSpot to Boss API Diagram</title>
+  <title>HubSpot to BOS API Diagram</title>
   <!-- Include Mermaid.js -->
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
@@ -11,21 +11,23 @@
   </script>
 </head>
 <body>
-  <h1>HubSpot to Boss Integration Flow</h1>
+  <h1>HubSpot to BOS Integration Flow</h1>
   <div class="mermaid">
     flowchart LR
         subgraph HubSpot
             HS[HubSpot]
         end
-        subgraph BossAPI
-            API[Boss Integration API]
+        subgraph BOSAPI
+            F1["fetchFullContactDetails(hubspotCustomerId)"]
+            F2["createCustomerExternalID(contactData, branch)"]
         end
-        subgraph BossDB
+        subgraph BOSDb
             DB[(Driver & Contact Data)]
         end
 
-        HS -- "Webhook: Ticket Event" --> API
-        API --> DB
+        HS -- "Webhook: Ticket Event" --> F1
+        F1 --> F2
+        F2 --> DB
   </div>
 </body>
 </html>
